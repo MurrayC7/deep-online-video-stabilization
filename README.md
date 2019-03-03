@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Deep Online Video Stabilization with Multi-Grid Warping Transformation Learning
 https://ieeexplore.ieee.org/document/8554287
 
@@ -52,3 +53,6 @@ DeepStab dataset (7.9GB)
     }
     ```
 
+=======
+# deep-video-stabilization
+>>>>>>> origin/master
