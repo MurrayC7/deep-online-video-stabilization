@@ -24,14 +24,15 @@ def main():
         cap = cv2.VideoCapture(each_video_full_path)
         frame_count = 1
         success = True
-        while (success):
+        while success:
             success, frame = cap.read()
-            print('Read a new frame: ', success)
+            if not success:
+                print('Read a new frame: ', success, frame_count)
 
             params = []
             params.append(cv2.IMWRITE_PXM_BINARY)
             params.append(1)
-            cv2.imwrite(each_video_save_full_path + each_video_name + "%d.jpg" % frame_count, frame, params)
+            cv2.imwrite(each_video_save_full_path + "%d.jpg" % frame_count, frame, params)
 
             frame_count = frame_count + 1
 
@@ -59,4 +60,4 @@ def rename_():
 
 
 if __name__ == '__main__':
-    rename_()
+    main()
