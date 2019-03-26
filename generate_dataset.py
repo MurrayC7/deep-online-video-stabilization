@@ -24,11 +24,11 @@ def show_image(location, title, img, width=None):
         plt.close()
 
 
-frame_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/stable/1/"
-
-video_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/unstable/1.avi"
-gen_video_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/unstable/1gen.avi"
-gen_frame_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/unstable/1/"
+# frame_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/stable/1/"
+#
+# video_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/unstable/1.avi"
+# gen_video_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/unstable/1gen.avi"
+# gen_frame_path = "/Users/plusub/PycharmProjects/deep-online-video-stabilization/data/train/unstable/1/"
 
 # hyperparameters
 rho = 8
@@ -42,9 +42,9 @@ indices = [0, 1, 2, 4, 8, 16, 32]
 gen_batch_size = 30
 
 
-def gen_with_unstable_flow(cap, frame_save_path):
-    loc_list = glob(os.path.join(frame_path, '*.jpg'))
-    loc_list.sort(key=lambda x: int(x[len(frame_path):-4]))
+def gen_with_unstable_flow(cap, stable_frame_path, frame_save_path):
+    loc_list = glob(os.path.join(stable_frame_path, '*.jpg'))
+    loc_list.sort(key=lambda x: int(x[len(stable_frame_path):-4]))
     # Take first frame
     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
     ret, first_frame = cap.read()
@@ -173,6 +173,8 @@ if __name__ == '__main__':
     videos_src_path = '../DeepStab/unstable'
     videos_save_path = './data_video/gen_unstable/video'
     frame_save_path = './data_video/gen_unstable/frame'
+    stable_frame_path = './data_video/stable'
+
     videos = os.listdir(videos_src_path)
     videos = filter(lambda x: x.endswith('avi'), videos)
 
@@ -186,12 +188,13 @@ if __name__ == '__main__':
 
         each_frame_save_full_path = os.path.join(frame_save_path, each_video_name) + '/'
         each_video_save_full_path = os.path.join(videos_save_path, each_video_name) + '/'
+        each_stable_frame_full_path = os.path.join(stable_frame_path, each_video_name) + '/'
 
         # get the full path of each video, which will open the video tp extract frames
         each_video_full_path = os.path.join(videos_src_path, each_video)
 
         cap = cv2.VideoCapture(each_video_full_path)
-        gen_with_unstable_flow(cap, each_frame_save_full_path)
+        gen_with_unstable_flow(cap, each_stable_frame_full_path, each_frame_save_full_path)
         frame2video(each_frame_save_full_path, each_video_save_full_path)
     print("done")
     print("")
