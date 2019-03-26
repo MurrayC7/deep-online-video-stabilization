@@ -63,7 +63,7 @@ def gen_with_unstable_flow(cap, stable_frame_path, frame_save_path):
             next_gray = cv2.cvtColor(next_frame, cv2.COLOR_BGR2GRAY)
             # calculate optical flow
             # os.system("python2 /media/omnisky/cc/PWC-Net/PyTorch/script_pwc.py '%s' '%s' '%s'" % (prev_framepath, framepath, ofpath))
-            flow = calcOpticalFlowPWC(prev_gray, next_gray)
+            flow = calcOpticalFlowPWC(prev_frame, next_frame)
             # flow = cv2.calcOpticalFlowFarneback(prev_gray, next_gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
             last_flow = flow
         else:
@@ -90,7 +90,7 @@ def gen_with_unstable_flow(cap, stable_frame_path, frame_save_path):
         # print(gen_idx)
         cv2.imwrite(os.path.join(frame_save_path, "%d.jpg" % (gen_idx + 1)), new_frame)
         if ret:
-            prev_gray = next_gray
+            prev_frame = next_frame
         else:
             continue
         gen_idx += 1
