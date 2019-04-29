@@ -7,12 +7,15 @@ import cv2
 
 # 读取图像
 frames = []
+cap = cv2.VideoCapture('data/train/unstable/1.avi')
 for i in range(20):
-    im = cv2.imread('data/train/unstable/1/%d.jpg' % i)
+    # im = cv2.imread('data/train/stable/1/%d.jpg' % (i + 1))
+    im, ret = cap.read()
+    im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     frames.append(im)
 # cv2.imshow('original', im)
 # cv2.waitKey()
-
+cap.release()
 # 下采样
 # im_lowers = cv2.pyrDown(im)
 # cv2.imshow('im_lowers',im_lowers)
@@ -26,14 +29,16 @@ for i in range(2 - 1):
     k1 = []
     k2 = []
     for k in keypoints1:
-        k1.append((k.pt[0], k.pt[1]))
+        k1.append((int(k.pt[0]), int(k.pt[1])))
     for k in keypoints2:
-        k2.append((k.pt[0], k.pt[1]))
+        k2.append((int(k.pt[0]), int(k.pt[1])))
     bf = cv2.BFMatcher()
     matches = bf.knnMatch(des1, des2, k=2)
 
     good = []
     for m, n in matches:
+        md = m.distance
+        nd = n.distance
         if m.distance < 0.75 * n.distance:
             good.append([m])
     img3 = cv2.drawMatchesKnn(frames[i], keypoints1, frames[i + 1], keypoints2, good[:20], None, flags=2)
@@ -43,7 +48,7 @@ for i in range(2 - 1):
 #     k0 = int(k.pt[0])
 #     k1 = int(k.pt[1])
 #     cv2.circle(im, (k0, k1), 1, (0, 255, 0), -1)
-    # cv2.circle(im,(int(k.pt[0]),int(k.pt[1])),int(k.size),(0,255,0),2)
+# cv2.circle(im,(int(k.pt[0]),int(k.pt[1])),int(k.size),(0,255,0),2)
 
 cv2.imshow('SURF_features', img3)
 cv2.waitKey()
